@@ -1,0 +1,147 @@
+openapi: 3.0.3
+info:
+  title: Jarvis API
+  version: 1.0.0
+servers:
+- url: https://api.domain.com
+paths:
+  /events:
+    get:
+      summary: Read majorThing events from dateTime. MinorThing can also be specified.
+      tags:
+      - events
+      parameters:
+      - name: majorThing
+        description: Alphanumeric only.
+        example: home
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: dateTime
+        description: Events from ISO 8601 UTC. If not specified or invalid defaults to midnight UTC.
+        example: '2021-11-26T00:00:00.000Z'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: minorThing
+        description: Alphanumeric only.
+        example: driveway
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Event read.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - basic_auth: []
+      - api_key: []
+    post:
+      summary: Create event.
+      tags:
+      - events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+        required: true
+      responses:
+        '200':
+          description: Event created.
+          content:
+            application/json: {}
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - basic_auth: []
+      - api_key: []
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          description: Alphanumeric only.
+          example: majorThing must be alphanumeric.
+          type: string
+    EventRequest:
+      type: object
+      properties:
+        majorThing:
+          description: Alphanumeric only.
+          example: home
+          type: string
+        minorThing:
+          description: Alphanumeric only.
+          example: driveway
+          type: string
+        event:
+          description: Alphanumeric only.
+          example: motion
+          type: string
+    EventResponse:
+      type: object
+      properties:
+        dateTime:
+          type: string
+          format: date-time
+        majorThing:
+          description: Alphanumeric only.
+          example: home
+          type: string
+        minorThing:
+          description: Alphanumeric only.
+          example: driveway
+          type: string
+        event:
+          description: Alphanumeric only.
+          example: motion
+          type: string
+  securitySchemes:
+    basic_auth:
+      type: http
+      scheme: basic
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
