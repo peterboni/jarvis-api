@@ -19,7 +19,6 @@ export async function handler(event: APIGatewayRequestAuthorizerEvent): Promise<
     const password = plainCreds[1];
 
     console.debug('Username:', username);
-    console.debug('Password:', password);
 
     if (!(username === process.env.USERNAME &&
           password === process.env.PASSWORD)) throw new Error("Unauthorized");
