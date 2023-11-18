@@ -65,7 +65,8 @@ export class Events extends Construct {
                 PASSWORD: props.account.password
             },
             logRetention: 30,
-            runtime: lambda.Runtime.NODEJS_16_X
+            runtime: lambda.Runtime.NODEJS_20_X,
+            memorySize: 256
         });
 
         /*
@@ -81,7 +82,8 @@ export class Events extends Construct {
                 EVENTS_TABLE_NAME: table.tableName
             },
             logRetention: 30,
-            runtime: lambda.Runtime.NODEJS_16_X
+            runtime: lambda.Runtime.NODEJS_20_X,
+            memorySize: 256
         });
         // Grant DynamoDB table read/write to Lambda
         table.grantReadWriteData(createLambda);
@@ -99,7 +101,8 @@ export class Events extends Construct {
                 EVENTS_TABLE_NAME: table.tableName
             },
             logRetention: 30,
-            runtime: lambda.Runtime.NODEJS_16_X
+            runtime: lambda.Runtime.NODEJS_20_X,
+            memorySize: 256
         });
         // Grant DynamoDB table read/write to Lambda
         table.grantReadWriteData(readLambda);
